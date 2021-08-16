@@ -55,7 +55,7 @@ Por último, resulta interesante darle lugar también a un último debate actual
 
 A continuación, se presenta un mapa mental a modo de resumen de los temas expuestos hasta el momento, antes de proceder con la conclusión personal acerca de todos estos temas.
 
-(Mapa mental disponible en la misma carpeta)
+![imagen](https://user-images.githubusercontent.com/69587750/129032331-6256a12f-d45e-4772-a98b-c24a8ffa4753.png)
 
 ## Opinión Personal
 
