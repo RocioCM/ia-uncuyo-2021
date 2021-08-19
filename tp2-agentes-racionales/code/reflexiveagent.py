@@ -1,11 +1,18 @@
 from agent import Agent
+from random import randrange
 
 
 class ReflexiveAgent(Agent):
     def think(self):
-        if (self.percept == True):
+        if (self.perceive()):
             self.suck()
         else:
-            print("Hola")
-            # Insert as many if then as you want here.
-            # Maybe, elegir entre alguna de las cuatro direcciones (nunca elegir idle) de forma aleatoria. Podria comprobar que si estoy al borde, no moverme para ese lado.
+            action = randrange(4)
+            if (action == 0):
+                self.up()
+            elif (action == 1):
+                self.down()
+            elif (action == 2):
+                self.left()
+            elif (action == 3):
+                self.right()
