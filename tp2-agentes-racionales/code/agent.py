@@ -11,7 +11,6 @@ class Agent(ABC):
             raise Exception('Initial position out of index')
         self.positionX = initPosX
         self.positionY = initPosY
-        print('Initial position: (', initPosX, ',', initPosY, ') \n')
         while (self.remainingActions > 0):
             self.think()
 

@@ -3,28 +3,31 @@ from randomagent import RandomAgent
 from reflexiveagent import ReflexiveAgent
 import random
 
-sizeX = 12
-sizeY = 12
-dirtRate = 0.5
+dirtRate = 0.1
+sizes = [2, 4, 8, 16, 32, 64, 128]
+dirtRates = [0.1, 0.2, 0.4, 0.8]
 
-# Random Agent
-env1 = Environment(sizeX, sizeY, dirtRate)
-env1.printEnvironment()
+# # Agent performance:
+# for size in sizes:
+#     for dirt in dirtRates:
+#         # Random Agent
+#         print("Size: ", size, "x", size, ". Dirt: ", dirt)
+#         env1 = Environment(size, size, dirt)
 
-posX = random.randrange(sizeX)
-posY = random.randrange(sizeY)
-agent1 = RandomAgent(env1, posX, posY)
-agent1.suck()
-env1.printEnvironment()
-print(env1.getPerformance())
+#         posX = random.randrange(size)
+#         posY = random.randrange(size)
+#         agent1 = RandomAgent(env1, posX, posY)
+#         print(env1.getPerformance())
 
 # Reflexive Agent
-env2 = Environment(sizeX, sizeY, dirtRate)
+env2 = Environment(sizes[3], sizes[3], dirtRates[2])
+print("Initial environment: ")
 env2.printEnvironment()
 
-posX = random.randrange(sizeX)
-posY = random.randrange(sizeY)
+posX = random.randrange(sizes[3])
+posY = random.randrange(sizes[3])
+print("Initial position: (" + str(posX) + ", " + str(posY) + "). \n")
 agent2 = ReflexiveAgent(env2, posX, posY)
-agent2.suck()
+print("Final environment: ")
 env2.printEnvironment()
 print(env2.getPerformance())
