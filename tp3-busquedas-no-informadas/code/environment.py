@@ -2,13 +2,25 @@ from random import randrange
 import math
 
 
+class Node:
+    position = None
+    isObstacle = False
+    status = 0  # 0 = unvisited. 1 = frontier. 2 = visited. 3 = path.
+    prevNode = None
+    distance = None
+
+    def __init__(self, position):
+        self.position = position
+
+
 class Environment:
-    obstaclesRate = 0.3
+    obstaclesRate = 0.2
     size = 10
+    agent = None
 
     def __init__(self):
-        self.matrix = [[u"\u2B1C" for i in range(
-            self.size)] for j in range(self.size)]  # All white
+        self.matrix = [[Node((j, i)) for i in range(
+            self.size)] for j in range(self.size)]  # Without obstacles
         self.__createObstacles()
 
     def __createObstacles(self):
@@ -19,15 +31,30 @@ class Environment:
             column = randrange(self.size)
             alreadyHasObstacle = self.hasObstacle(row, column)
             if (not(alreadyHasObstacle)):
-                self.matrix[row][column] = u"\u2B1B"  # Black
+                self.matrix[row][column].isObstacle = True
                 obstaclesLeft -= 1
 
+    def getNodeAt(self, position):
+        return self.matrix[position[0]][position[1]]
+
     def hasObstacle(self, row, column):
-        return self.matrix[row][column] == u"\u2B1B"  # Black
+        return self.matrix[row][column].isObstacle
 
     def printEnvironment(self):
         for i in range(self.size):
             for j in range(self.size):
-                print(self.matrix[i][j], end='')
+                node = self.matrix[i][j]
+                if (node.isObstacle):
+                    print(u"\u2B1C", end='')
+                elif (self.agent != None and node == self.agent.initialNode):
+                    print(" O", end='')
+                elif (self.agent != None and node == self.agent.targetNode):
+                    print(" D", end='')
+                elif (node.status == 2):
+                    print(" !", end='')
+                elif (node.status == 3):
+                    print(" =", end='')
+                else:
+                    print(u"\u2B1B", end='')
             print('')
         print('')
