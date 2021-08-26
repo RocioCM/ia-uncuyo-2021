@@ -55,7 +55,6 @@ class Agent:
             if (searchType == 0):  # Queue
                 return frontier.pop(0)
             elif (searchType == 1):  # Priority Queue
-                # TODO: check this sorting works!
                 def distanceSort(node):
                     return node.distance
                 frontier.sort(key=distanceSort)
@@ -89,22 +88,23 @@ class Agent:
         return nodeFrontier
 
     def think(self):
-        # 1. Miro este nodo.
+        # 1. Check the initial state.
         currentNode = self.state
         currentNode.distance = 0
-        currentNode.status = 2
+        currentNode.status = 2  # Visited
         if (currentNode == self.targetNode):
             currentNode = None
         while (currentNode != None):
+            # 2. Update the current state.
             self.state = currentNode
-            self.state.status = 2
+            self.state.status = 2  # Visited
 
-            # 2. Pongo todos en la frontera.
+            # 3. Find the possible next states (add new nodes to the frontier).
             nodeFrontier = self.sucesor()
-            # 2.1 Reviso que cada uno no sea el target y lo actualizo como visitado.
+            # 3.1 Check if any of the new frontier nodes are the target node and update them.
             reachedTarget = False
             for node in nodeFrontier:
-                node.status = 1
+                node.status = 1  # Frontier
                 node.prevNode = self.state
                 node.distance = self.state.distance + 1
                 if (node == self.targetNode):
@@ -112,20 +112,21 @@ class Agent:
                     break
             if (reachedTarget):
                 break
+            # 3.2 Add the new discovered nodes to the frontier.
             self.frontier.extend(nodeFrontier)
 
-            # 3. Elijo un nuevo nodo y reitero.
+            # 4. Choose the next state from the possible next states (depending on the selected search algorithm)
             currentNode = self.getNextNode()
             self.statesCount += 1
 
-        # 4. Marcar el camino. Empezando desde el destino y yendo por los previousNode hasta el inicial.
+        # 5. Draw the path. Starting from the target up to the initial node.
         target = self.targetNode
         if (target.prevNode == None):
             self.path = None
             return
         node = target
         while (node != None):
-            node.status = 3
+            node.status = 3  # Path
             self.path.insert(0, node.position)
             node = node.prevNode
 

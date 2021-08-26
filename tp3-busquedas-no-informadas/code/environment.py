@@ -10,12 +10,12 @@ class Node:
     distance = None
 
     def __init__(self, position):
-        self.position = position
+        self.position = position  # position is a 2-tuple of int: (row, column)
 
 
 class Environment:
     obstaclesRate = 0.2
-    size = 10
+    size = 100
     agent = None
 
     def __init__(self):
@@ -45,16 +45,16 @@ class Environment:
             for j in range(self.size):
                 node = self.matrix[i][j]
                 if (node.isObstacle):
-                    print(u"\u2B1C", end='')
+                    print(u"\u2B1C", end='')  # Obstáculo - blanco
                 elif (self.agent != None and node == self.agent.initialNode):
-                    print(" O", end='')
+                    print(" "u"\u25B7", end='')  # Origen
                 elif (self.agent != None and node == self.agent.targetNode):
-                    print(" D", end='')
+                    print(" "u"\u272A", end='')  # Objetivo
                 elif (node.status == 2):
-                    print(" !", end='')
+                    print("  ", end='')  # Explorado - negro
                 elif (node.status == 3):
-                    print(" =", end='')
+                    print(" =", end='')  # Camino
                 else:
-                    print(u"\u2B1B", end='')
+                    print(u"\u2B1B", end='')  # Inexplorado - gris
             print('')
         print('')
