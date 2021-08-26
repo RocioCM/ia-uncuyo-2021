@@ -26,7 +26,11 @@ class Agent:
 
     def isExplorablePosition(self, position):
         node = self.environment.getNodeAt(position)
-        return not(node.isObstacle) and node.status == 0
+        searchType = self.searchType
+        currentDistance = self.state.distance + 1
+        # The position is explorable if it's not an obstacle and it's not explored nor in the frontier.
+        # But if the search type is uniform search, then the position ALSO is explorable if it's on the frontier and its previous distance is greater that the distance on the current path.
+        return not(node.isObstacle) and (node.status == 0 or (searchType == 1 and node.distance > currentDistance))
 
     def up(self):
         position = self.state.position
@@ -101,9 +105,11 @@ class Agent:
 
             # 3. Find the possible next states (add new nodes to the frontier).
             nodeFrontier = self.sucesor()
-            # 3.1 Check if any of the new frontier nodes are the target node and update them.
+            # 3.1 Check if any of the new frontier nodes are the target node and update them, then add them to the frontier.
             reachedTarget = False
             for node in nodeFrontier:
+                if (node.status == 0):  # In uniform search, node may already be on the frontier (status == 1)
+                    self.frontier.append(node)
                 node.status = 1  # Frontier
                 node.prevNode = self.state
                 node.distance = self.state.distance + 1
@@ -112,8 +118,6 @@ class Agent:
                     break
             if (reachedTarget):
                 break
-            # 3.2 Add the new discovered nodes to the frontier.
-            self.frontier.extend(nodeFrontier)
 
             # 4. Choose the next state from the possible next states (depending on the selected search algorithm)
             currentNode = self.getNextNode()
