@@ -1,7 +1,6 @@
 from dfsagent import AgentDFS
 from uniformagent import AgentUniform
 from bfsagent import AgentBFS
-from agent import Agent
 from environment import Environment
 import statistics
 
@@ -16,13 +15,15 @@ print("Sucesión de estados: ", performance[1])
 
 def test():
     iterations = 30
-    algorithms = ["BFS", "Búsqueda Uniforme", "DFS"]
+    algorithms = [("BFS", AgentBFS),
+                  ("Búsqueda Uniforme", AgentUniform),
+                  ("DFS", AgentDFS)]
 
-    for searchAlgo in range(len(algorithms)):
+    for agentType in algorithms:
         statesCountsList = []
         for i in range(iterations):
             env = Environment()
-            agent = Agent(env, searchAlgo)
+            agent = agentType[1](env)
             performance = agent.getPerformance()
             successful = performance[1] != None
             if (successful):
@@ -34,11 +35,12 @@ def test():
         DE = round(statistics.stdev(statesCountsList), 1)
 
         print("\n-----------> Rendimiento del Agente usando el algoritmo",
-              algorithms[searchAlgo])
+              agentType[0])
         print(successCount, "de", iterations,
               "agentes tuvieron éxito en llegar al destino.")
         print("Media: ", media, "estados")
         print("Desviación Estándar: ", DE, "estados \n")
 
 
-# test() # Uncomment this line to run the 90 iterations for the different scenarios.
+# Uncomment this line to run the 90 iterations for the different scenarios.
+test()
