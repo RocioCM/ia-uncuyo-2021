@@ -15,7 +15,7 @@ class Node:
 
 class Environment:
     obstaclesRate = 0.2
-    size = 20
+    size = 100
     agent = None
 
     def __init__(self):
