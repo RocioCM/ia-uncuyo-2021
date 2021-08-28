@@ -1,15 +1,15 @@
+from abc import ABC, abstractmethod
 from random import randrange
 
 
-class Agent:
+class Agent(ABC):
     statesCount = 1
     frontier = []
     path = []
 
-    def __init__(self, environment, searchType):
+    def __init__(self, environment):
         self.environment = environment
         environment.agent = self
-        self.searchType = searchType
         self.initialNode = self.findAvailablePosition()
         self.targetNode = self.findAvailablePosition()
         self.state = self.initialNode
@@ -18,19 +18,16 @@ class Agent:
     def findAvailablePosition(self):
         availablePosition = False
         while (not(availablePosition)):
-            positionX = randrange(self.environment.size)
-            positionY = randrange(self.environment.size)
-            if (not(self.environment.hasObstacle(positionY, positionX))):
+            row = randrange(self.environment.size)
+            column = randrange(self.environment.size)
+            if (not(self.environment.hasObstacle((row, column)))):
                 availablePosition = True
-        return self.environment.getNodeAt((positionY, positionX))
+        return self.environment.getNodeAt((row, column))
 
     def isExplorablePosition(self, position):
-        node = self.environment.getNodeAt(position)
-        searchType = self.searchType
-        currentDistance = self.state.distance + 1
         # The position is explorable if it's not an obstacle and it's not explored nor in the frontier.
-        # But if the search type is uniform search, then the position ALSO is explorable if it's on the frontier and its previous distance is greater that the distance on the current path.
-        return not(node.isObstacle) and (node.status == 0 or (searchType == 1 and node.distance > currentDistance))
+        node = self.environment.getNodeAt(position)
+        return not(node.isObstacle) and (node.status == 0)
 
     def up(self):
         position = self.state.position
@@ -52,31 +49,9 @@ class Agent:
         if (position[1] < self.environment.size - 1):
             return self.isExplorablePosition((position[0], position[1]+1))
 
-    def getNextNode(self):
-        searchType = self.searchType
-        frontier = self.frontier
-        try:
-            if (searchType == 0):  # Queue
-                return frontier.pop(0)
-            elif (searchType == 1):  # Priority Queue
-                def distanceSort(node):
-                    return node.distance
-                frontier.sort(key=distanceSort)
-                return frontier.pop(0)
-            elif (searchType == 2):  # Stack
-                return frontier.pop()
-            else:
-                raise Exception(
-                    "No se eligió un método de búsqueda válido. \nMétodos válidos: \n  0 = BFS \n  1 = Búsqueda Uniforme \n  2 = DFS")
-        except (IndexError):
-            return None
-
     def sucesor(self):
         position = self.state.position
         nodeFrontier = []
-        if (self.searchType == 2 and self.state.distance >= self.environment.size*3):
-            # Depth limit reached for DFS
-            return nodeFrontier
         if (self.up()):
             nodeFrontier.append(self.environment.getNodeAt(
                 (position[0]-1, position[1])))
@@ -90,6 +65,10 @@ class Agent:
             nodeFrontier.append(self.environment.getNodeAt(
                 (position[0], position[1]+1)))
         return nodeFrontier
+
+    @abstractmethod
+    def getNextNode(self):
+        pass
 
     def think(self):
         # 1. Check the initial state.
@@ -135,4 +114,5 @@ class Agent:
             node = node.prevNode
 
     def getPerformance(self):
+        # States count is of type int and path is a list of 2-tuples (representing positions) of the path between the initial and target positions.
         return (self.statesCount, self.path)

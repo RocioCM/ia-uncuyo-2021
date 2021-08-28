@@ -1,10 +1,13 @@
+from dfsagent import AgentDFS
+from uniformagent import AgentUniform
+from bfsagent import AgentBFS
 from agent import Agent
 from environment import Environment
 import statistics
 
 print("Ejemplo usando DFS: ")
 env = Environment()
-agent = Agent(env, 2)
+agent = AgentDFS(env)
 env.printEnvironment()
 performance = agent.getPerformance()
 print("Cantidad de estados: ", performance[0])

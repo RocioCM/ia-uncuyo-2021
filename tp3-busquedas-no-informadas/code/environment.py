@@ -15,7 +15,7 @@ class Node:
 
 class Environment:
     obstaclesRate = 0.2
-    size = 100
+    size = 20
     agent = None
 
     def __init__(self):
@@ -29,7 +29,7 @@ class Environment:
         while (obstaclesLeft > 0):
             row = randrange(self.size)
             column = randrange(self.size)
-            alreadyHasObstacle = self.hasObstacle(row, column)
+            alreadyHasObstacle = self.hasObstacle((row, column))
             if (not(alreadyHasObstacle)):
                 self.matrix[row][column].isObstacle = True
                 obstaclesLeft -= 1
@@ -37,8 +37,8 @@ class Environment:
     def getNodeAt(self, position):
         return self.matrix[position[0]][position[1]]
 
-    def hasObstacle(self, row, column):
-        return self.matrix[row][column].isObstacle
+    def hasObstacle(self, position):
+        return self.matrix[position[0]][position[1]].isObstacle
 
     def printEnvironment(self):
         for i in range(self.size):
