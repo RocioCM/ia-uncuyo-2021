@@ -1,6 +1,6 @@
-from dfsagent import AgentDFS
-from uniformagent import AgentUniform
-from bfsagent import AgentBFS
+from agentdfs import AgentDFS
+from agentuniform import AgentUniform
+from agentbfs import AgentBFS
 from environment import Environment
 import statistics
 
@@ -42,5 +42,4 @@ def test():
         print("Desviación Estándar: ", DE, "estados \n")
 
 
-# Uncomment this line to run the 90 iterations for the different scenarios.
-test()
+# test() # Uncomment this line to run the 90 iterations for the different scenarios.
