@@ -52,10 +52,8 @@ class Agent:
     def getNextNode(self):
         frontier = self.frontier
         try:
-            # Priority Queue
-            def distanceSort(node):
-                return node.cost
-            frontier.sort(key=distanceSort)
+            # Priority Queue. Prioritize paths with shorter distances already to explore.
+            frontier.sort(key=lambda node: (node.cost - node.distance**0.5))
             return frontier.pop(0)
         except (IndexError):
             return None
