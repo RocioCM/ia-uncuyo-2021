@@ -26,6 +26,12 @@ Sumado a que las posiciones de salida y objetivo del agente también fueron gene
 
 **Desviación Estándar:**  2539.3 estados
 
-# Gráfico comparativo
+## Gráfico comparativo
 
 ![imagen](https://user-images.githubusercontent.com/69587750/130880484-f6749c29-f4d2-42a6-b912-21737d40e3ae.png)
+
+## Conclusión
+
+Considerando los resultados promedio de rendimiento de cada algoritmo, se podría pensar que el "algoritmo más eficiente" es búsqueda en profundidad, pero eso en realidad depende del criterio. Si nuestro criterio fuera recorrer la menor cantidad de casillas (estados) para llegar al destino, entonces estaríamos en lo correcto. Pero dado que nuestro objetivo es "encontrar el camino óptimo", es decir, el más corto, el algoritmo eficaz para este fin sería búsqueda en amplitud o búsqueda uniforme. 
+
+Lo interesante del caso es que como para esta implementación se decidió que el costo de desplazarse entre dos casillas cualesquiera fuera constante (es decir, nuestro grafo no es ponderado), el algoritmo de búsqueda uniforme encuentra siempre el camino más corto, al igual que la búsqueda en amplitud, ya que termina barriendo el terreno en un orden equivalente al del algoritmo en amplitud. Si el planteo del problema incluyera que el costo de desplazarse entre dos casillas cualesquiera es variable, entonces el algoritmo eficaz para este caso sería únicamente búsqueda uniforme, ya que se asegura de a cada paso elegir el camino más corto posible, no solo teniendo en cuenta la cantidad de casillas del camino sino también los costos de desplazarse entre ellas.
