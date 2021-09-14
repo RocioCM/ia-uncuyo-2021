@@ -29,7 +29,8 @@ def Agent(env, chooseStateWithProbability):
         # state[0] is the number of threatened queens pairs in that state.
         nextState = nextStates.pop()
         [nextThreatenedQueens, movement] = nextState
-        if (threatenedQueens < nextThreatenedQueens):  #The new state is worse.
+        if (threatenedQueens <=
+                nextThreatenedQueens):  #The new state is worse.
             useTheNextState = chooseStateWithProbability(
                 threatenedQueens, nextThreatenedQueens, cont)
             if (not (useTheNextState)):
