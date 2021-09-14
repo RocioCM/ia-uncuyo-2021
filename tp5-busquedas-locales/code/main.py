@@ -1,14 +1,16 @@
 from environment import Environment
 from agents import hillClimbing, simulatedAnnealing
 
-env = Environment(8, [1, 1, 2, 2, 2, 2, 6, 4])
+env = Environment(8, [1, 1, 1, 1, 1, 1, 1, 1])
 
 print("\nInitial state: ")
 env.print()
 
-performance = simulatedAnnealing(env)
+performance = hillClimbing(env)
 
-print("Threatened queens: ", performance[0])
+print("Threatened queens pairs: ", performance[0])
 if (performance[0] != 0):
-    print("The threatened queens pairs are: ", performance[1])
+    print(
+        "The threatened queens pairs are (the numbers are zero-based queens columns): ",
+        performance[1])
 env.print()

@@ -3,7 +3,7 @@ import random
 
 
 def hillClimbing(env):
-    return Agent(env, lambda: False)
+    return Agent(env, lambda *args: False)
 
 
 def simulatedAnnealing(env):
