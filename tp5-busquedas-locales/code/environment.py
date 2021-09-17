@@ -42,14 +42,14 @@ class Environment:
     def moveQueen(self, movement):
         [queenColumn, newRow] = movement
         self.queens[queenColumn] = newRow
-        self.threatenedQueens = self.__getThreatenedQueensForMovement(movement)
+        self.threatenedQueens = self.getThreatenedQueensForMovement(movement)
 
     def getAllPossibleNextStates(self):
         nextStates = []
         for column in range(self.size):
             for row in range(self.size):
                 if (self.queens[column] != row):
-                    nextPairs = self.__getThreatenedQueensForMovement(
+                    nextPairs = self.getThreatenedQueensForMovement(
                         (column, row))
                     nextStates.append((len(nextPairs), (column, row)))
         return nextStates
@@ -66,7 +66,7 @@ class Environment:
             return True
         return False
 
-    def __getThreatenedQueensForMovement(self, movement):
+    def getThreatenedQueensForMovement(self, movement):
         queenColumn = movement[0]
         newThreatened = self.threatenedQueens.copy()
         # 1. Delete from threatened all tuples where the first or the second value (queen) is queenColumn.

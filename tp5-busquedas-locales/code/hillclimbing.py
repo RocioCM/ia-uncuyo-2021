@@ -1,24 +1,4 @@
-import math
-import random
-
-
 def hillClimbing(env):
-    return Agent(env, lambda *args: False)
-
-
-def simulatedAnnealing(env):
-    def chooseWorseState(count, nextCount, T):
-        dE = nextCount - count
-        probability = math.e**(
-            dE / T)  # ///This now greater than 1. It should be [0,1].
-        print("Probability: ", probability)  # ///
-        randomNumber = random.random()
-        return randomNumber <= probability
-
-    return Agent(env, chooseWorseState)
-
-
-def Agent(env, chooseStateWithProbability):
     cont = 0
     threatenedQueens = env.getThreatenedQueensPairsCount()  #int
     while threatenedQueens != 0:
@@ -29,12 +9,8 @@ def Agent(env, chooseStateWithProbability):
         # state[0] is the number of threatened queens pairs in that state.
         nextState = nextStates.pop()
         [nextThreatenedQueens, movement] = nextState
-        if (threatenedQueens <=
-                nextThreatenedQueens):  #The new state is worse.
-            useTheNextState = chooseStateWithProbability(
-                threatenedQueens, nextThreatenedQueens, cont)
-            if (not (useTheNextState)):
-                break
+        if (threatenedQueens <= nextThreatenedQueens):  #The new state is worse
+            break
         env.moveQueen(movement)
         threatenedQueens = nextThreatenedQueens
 
