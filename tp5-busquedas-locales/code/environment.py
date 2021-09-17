@@ -1,17 +1,36 @@
-from utils import getRandomState
+from random import shuffle
 
 
 class Environment:
     def __init__(self, size, initState=None):
         self.size = size
         if (initState == None):
-            initState = getRandomState(size)
+            initState = self.getRandomState(size)
         elif (not (self.__isValidState(initState))):
             raise Exception(
                 "Provided initial state is not a valid state for this environment"
             )
         self.queens = initState
         self.calculateAllThreats()
+
+    @staticmethod
+    def getRandomState(size):
+        newState = [i for i in range(size)]
+        shuffle(newState)
+        return newState
+
+    @staticmethod
+    def areQueensThreatening(queen1, queen2):
+        [queen1Col, queen1Row] = queen1
+        [queen2Col, queen2Row] = queen2
+        if (queen1Col == queen2Col):  # same column
+            return True
+        if (queen1Row == queen2Row):  # same row
+            return True
+        if (abs(queen1Col - queen2Col) == abs(queen1Row -
+                                              queen2Row)):  # same diagonal
+            return True
+        return False
 
     def __isValidState(self, state):
         if (len(state) != self.size):
@@ -32,7 +51,7 @@ class Environment:
         for queen1 in range(self.size):
             for queen2 in range(queen1 + 1, self.size):
                 if (queen1 != queen2):
-                    threat = self.__areQueensThreatening(
+                    threat = self.areQueensThreatening(
                         (queen1, self.queens[queen1]),
                         (queen2, self.queens[queen2]))
                     if (threat):
@@ -54,18 +73,6 @@ class Environment:
                     nextStates.append((len(nextPairs), (column, row)))
         return nextStates
 
-    def __areQueensThreatening(self, queen1, queen2):
-        [queen1Col, queen1Row] = queen1
-        [queen2Col, queen2Row] = queen2
-        if (queen1Col == queen2Col):  # same column
-            return True
-        if (queen1Row == queen2Row):  # same row
-            return True
-        if (abs(queen1Col - queen2Col) == abs(queen1Row -
-                                              queen2Row)):  # same diagonal
-            return True
-        return False
-
     def getThreatenedQueensForMovement(self, movement):
         queenColumn = movement[0]
         newThreatened = self.threatenedQueens.copy()
@@ -77,7 +84,7 @@ class Environment:
         # 2. Recalculate the threat from that queen to the other n-1 queens and push them to the array.
         for otherQueen in range(self.size):
             if (otherQueen != queenColumn):
-                threat = self.__areQueensThreatening(
+                threat = self.areQueensThreatening(
                     movement, (otherQueen, self.queens[otherQueen]))
                 if (threat):
                     newThreatened.append((queenColumn, otherQueen))
