@@ -14,7 +14,7 @@ formatPopulationWithFitness = lambda population: list(
 def initPopulation(populationSize, individualSize):
     def Individual():
         return [
-            str(random.randrange(populationSize))
+            str(random.randrange(individualSize))
             for i in range(individualSize)
         ]
 
@@ -46,10 +46,22 @@ def reachedSolution(bestIndividual, size):
 
 def selectParentsWithProbability(population):
     parents = []
-    for j in range(2):
-        print("Hola")
-        #Make the probability select from the population list. And, oh, ensure both parents are different.
-        parent = (6, "1,1,1,1")
+    populationCopy = population.copy()
+    totalFitness = 0
+    for individual in population:
+        totalFitness += individual[0]
+    for i in range(2):
+        randomNumber = random.random()
+        random.shuffle(populationCopy)
+        parent = None
+        while (parent == None):
+            individual = populationCopy.pop()
+            probabilityToReproduce = individual[0] / totalFitness
+            if (randomNumber <= probabilityToReproduce):
+                parent = individual
+            elif ((i == 0 and len(populationCopy) == 1)
+                  or (i == 1 and len(populationCopy) == 0)):
+                parent = individual  #Only if no more parents are available.
         parents.append(toArray(parent[1]))
     return parents
 
@@ -89,8 +101,8 @@ def getBestNextGeneration(parents, children, splitPercent):
 
 
 def genetic(queens):
-    populationSize = 3
-    maxTime = 10
+    populationSize = 100
+    maxTime = 200
     mutationProbability = 0.3
     splitPercent = 0.1
     childrenPerParents = 2
@@ -98,7 +110,6 @@ def genetic(queens):
     #1. I create n random states. (each state is a string with 8 numbers from 0 to 7 separated by spaces, dots colons or whatever)
     population = initPopulation(populationSize, queens)
     population.sort(key=lambda tuple: tuple[0])
-    print(population)
     time = 0
     best = None
     while (time < maxTime and not (reachedSolution(best, queens))):
@@ -107,7 +118,7 @@ def genetic(queens):
         #2. For reproduction I choose n random pairs.
         for i in range(populationSize // childrenPerParents):
             #2.1 Each parent would be selected with probability proportional to their fitness.
-            parents = selectParentsWithProbability(parents)
+            parents = selectParentsWithProbability(population)
             #3. From each pair of parents, I create a new pair (2) of children, not just one child.
             #3.1 Cut them at random index x and join both them.
             newChildren = reproduce(parents, childrenPerParents)
@@ -128,14 +139,14 @@ def genetic(queens):
             best = bestOfGeneration
         time += 1
     #8. Return the record of the best individual you got across the whole algorithm (that is not necessary the last best, just the best across all).
-    return best
+    return (factorial(queens - 1) + 1 - best[0], toArray(best[1]), time)
 
 
 # print(fitness("1,3,2,4"))
 
 # print(initPopulation(3, 4))
 
-print(genetic(4))
+print(genetic(8))
 # genetic(100, 8, 1000, 0.3, 0.1, 2)
 
 # print(
