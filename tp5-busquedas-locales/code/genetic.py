@@ -140,17 +140,3 @@ def genetic(queens):
         time += 1
     #8. Return the record of the best individual you got across the whole algorithm (that is not necessary the last best, just the best across all).
     return (factorial(queens - 1) + 1 - best[0], toArray(best[1]), time)
-
-
-# print(fitness("1,3,2,4"))
-
-# print(initPopulation(3, 4))
-
-print(genetic(8))
-# genetic(100, 8, 1000, 0.3, 0.1, 2)
-
-# print(
-#     getBestNextGeneration([(3, '1,1,1,2'), (3, '2,2,2,0'), (1, '0,2,1,2')],
-#                           [(3, ''), (2, ''), (4, '')], 0.1))
-
-# print(reproduce(([1, 1, 1, 1, 1, 1, 1], [2, 2, 2, 2, 2, 2, 2]), 7))
