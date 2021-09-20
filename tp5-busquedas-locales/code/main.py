@@ -4,12 +4,6 @@ from simulatedannealing import simulatedAnnealing
 from genetic import genetic
 import time
 
-env = Environment(15)
-
-print("\nInitial state: ")
-env.print()
-
-# performance = hillClimbing(env)
 for size in [4, 8, 10, 12, 15]:
     hillTimes = []
     simulatedTimes = []
@@ -37,10 +31,11 @@ for size in [4, 8, 10, 12, 15]:
     print("Simulated for size ", size, ": ", simulatedTimes)
     print("Genetic for size ", size, ": ", geneticTimes)
 
-# performance = (1, 2)
-# while performance[0] != 0:
-#     performance = simulatedAnnealing(env)
-
+# # Code for just one execution:
+# env = Environment(15)
+# print("\nInitial state: ")
+# env.print()
+# performance = simulatedAnnealing(env)
 # print("Threatened queens pairs: ", performance[0])
 # if (performance[0] != 0):
 #     print(

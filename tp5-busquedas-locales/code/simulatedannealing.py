@@ -23,4 +23,4 @@ def simulatedAnnealing(env):
 
     print(("Solution found", "Found partial solution")[threatenedQueens != 0])
     print("Iterations: ", time)
-    return (threatenedQueens, env.getThreatenedQueensList())
+    return (threatenedQueens, env.getThreatenedQueensList(), time)

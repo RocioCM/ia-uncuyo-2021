@@ -16,4 +16,4 @@ def hillClimbing(env):
 
     print(("Solution found", "Found partial solution")[threatenedQueens != 0])
     print("Iterations: ", cont)
-    return (threatenedQueens, env.getThreatenedQueensList())
+    return (threatenedQueens, env.getThreatenedQueensList(), cont)
