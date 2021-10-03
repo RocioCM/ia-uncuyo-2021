@@ -21,19 +21,19 @@ allDiff(Xab, Xcd, Xef, Xjk, Xlm, Xnp, Xqr, Xst, Xuv), donde las 9 variables pert
 
 Para demostrar que la arco consistencia mediante el algoritmo AC-3 puede detectar la inconsistencia en este caso en particular del problema de colorear el mapa de Australia, lo único que hay que hacer es ejecutar el algoritmo paso a paso y llegaremos a esta conclusión.
 
-Para esta demostración nos servirá de ayuda la representación del problema en forma de grafo. Tras asignar colores a WA y V, sin aplicar ninguna restricción aún tenemos el siguiente grafo:
+Para esta demostración nos servirá de ayuda la representación del problema en forma de grafo. Tras asignar colores a WA y V, sin eliminar ninguna inconsistencia aún tenemos el siguiente grafo:
 
 ![imagen](https://user-images.githubusercontent.com/69587750/135764897-8a169411-9d46-47df-9355-a5db02b7d60f.png)
 
-En la primer iteración, se elimina el color azul de los vecinos de V (es decir, de SA y NSW) y el color rojo de los vecinos de WA (que son SA y NT). Luego de hacer esto, SA queda con solo el color verde como posibilidad, por lo tanto se le asigna ese color y se encolan sus vecinos para re-chequear (estos son NT, NSW y Q):
+En la primer iteración, se elimina el color azul de los vecinos de V (es decir, de SA y NSW) y el color rojo de los vecinos de WA (que son SA y NT). Luego de hacer esto, SA queda con solo el color verde como posibilidad, por lo tanto se le asigna ese color y se encolan sus vecinos para re-chequear su consistencia (estos son NT, NSW y Q):
 
 ![imagen](https://user-images.githubusercontent.com/69587750/135764955-7338b899-8654-49b0-ad66-aed90f70c08f.png)
 
-En la siguiente iteración, se elimina el color verde de los vecinos de SA, quedando NSW con solo el color rojo como posible y NT con solo azul. Por lo tanto ambos asumen tales colores y se encolan sus vecinos para re-chequear (el único vecino restante es Q):
+En la siguiente iteración, se elimina el color verde de los vecinos de SA, quedando NSW con solo el color rojo como posible y NT solo con azul. Por lo tanto ambos asumen tales colores y se encolan sus vecinos para re-chequear su consistencia (el único vecino restante es Q):
 
 ![imagen](https://user-images.githubusercontent.com/69587750/135767905-16eb4ac1-ac36-4db2-a7bf-a6cd381117d6.png)
 
-Y en la última iteración, cuando se revisa Q, nos encontramos con que no puede tomar ninguno de los tres colores ya que tiene como vecinos a SA de verde, NT de azul y NSW de rojo, por lo que hemos llegado a nuestra conclusión:  
+Y en la última iteración, cuando se revisa Q, y se eliminan sus valores posibles inconsistentes, nos encontramos con que no puede tomar ninguno de los tres colores de forma consistente ya que tiene como vecinos a SA de verde, NT de azul y NSW de rojo. Por lo que hemos llegado a nuestra conclusión, es decir, que la asignación parcial dada es inconsistente:  
 
 ![imagen](https://user-images.githubusercontent.com/69587750/135768040-932500c7-c966-492d-a6d0-b73578745b7e.png)
 
@@ -41,4 +41,11 @@ De este modo, queda demostrado que el algoritmo AC-3 de arco consistencia es cap
 
 ## Ejercicio 3
 
+Supongamos que tenemos un grafo de restricciones que forma un árbol, entonces si tenemos n variables, tendremos a lo sumo n-1 arcos. Suponiendo que cada variable puede tomar d valores, entonces cada arco se puede encolar para verificar hasta d veces, ya que solo tiene d valores para eliminar. Y además, sabemos que la consistencia de un arco se puede validar en tiempo O(d^2).
+
+Entonces, tenemos en nuestro peor caso, n-1 arcos, que se encolarán d veces cada uno y con una complejidad de verificarlos de d^2, lo que nos da como resultado un tiempo de O((n-1)\*d^3), simplificado como O(n\*d^3) para nuestro peor caso.
+
+## Ejercicio 4
+
+## Ejercicio 5
 
