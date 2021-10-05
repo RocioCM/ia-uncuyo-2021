@@ -53,3 +53,17 @@ Podríamos guardar para cada valor de Xk, cuántos valores de Xi satisfacen ese 
 
 ## Ejercicio 5
 
+Dado un problema cuyo grafo de restricciones es un árbol, tendremos que cada nodo tendrá a lo sumo un padre y cero o más hijos y ejecutaremos el algoritmo de consistencia desde las hojas hasta la raíz, siempre eliminando valores del dominio del nodo padre en cada arco revisado. De este modo, eliminar dichos valores no pone en riesgo la consistencia de los arcos ya revisados (que son los de más abajo o cercanos a las hojas del árbol). De este modo, se garantiza la arco consistencia del grafo, pero la afirmación de que esto a su vez implica k-consistencia se debe a que como el grafo es un árbol, los nodos solo se relacionan entre sí como padre e hijo, sin existir relaciones más complejas ni ciclos. De forma que sólo tendremos restricciones binarias en nuestro problema (las cuales serán entre nodos padre e hijo) y por lo tanto no tendremos inconsistencias de mayor nivel que 2-consistencia (es decir, arco consistencia), garantizando entonces que si no hay inconsistencias de arco, entonces no hay ningún tipo de inconsistencia, o sea, que está garantizada la k-consistencia.
+
+## Ejercicio 6
+
+#### Tiempo de ejecución promedio en cada variante:
+
+Promise\<pending\>
+  
+#### Cantidad de estados recorridos en cada variante:
+  
+Promise\<pending\>
+
+Promise\<pending\>
+  
