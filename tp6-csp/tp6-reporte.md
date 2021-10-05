@@ -17,6 +17,8 @@ allDiff(X1j, X2j, X3j, X4j, X5j, X6j, X7j, X8j, X9j), donde j es una columna del
 No repetir valores por recuadro:
 allDiff(Xab, Xcd, Xef, Xjk, Xlm, Xnp, Xqr, Xst, Xuv), donde las 9 variables pertenecen al mismo de los 9 recuadros de 3x3 delimitados en el tablero.
 
+**Ejecución**: podría en primera instancia revisar cada casilla vacía para dejarla en un estado consistente respecto a las casillas con números preasignados. A partir de entonces, simplemente sería cuestión de iterar eligiendo la próxima casilla mediante MRV y re-chequeando la consistencia de las casillas de la misma fila, columna y recuadro cada vez que se asigna un número en una casilla.
+
 ## Ejercicio 2
 
 Para demostrar que la arco consistencia mediante el algoritmo AC-3 puede detectar la inconsistencia en este caso en particular del problema de colorear el mapa de Australia, lo único que hay que hacer es ejecutar el algoritmo paso a paso y llegaremos a esta conclusión.
@@ -41,11 +43,13 @@ De este modo, queda demostrado que el algoritmo AC-3 de arco consistencia es cap
 
 ## Ejercicio 3
 
-Supongamos que tenemos un grafo de restricciones que forma un árbol, entonces si tenemos n variables, tendremos a lo sumo n-1 arcos. Suponiendo que cada variable puede tomar d valores, entonces cada arco se puede encolar para verificar hasta d veces, ya que solo tiene d valores para eliminar. Y además, sabemos que la consistencia de un arco se puede validar en tiempo O(d^2).
+Supongamos que tenemos un grafo de restricciones que forma un árbol, entonces si tenemos n variables, tendremos a lo sumo n-1 arcos. Al tener un árbol, cada arco se puede encolar para verificar hasta una vez y es suficiente para garantizar su consistencia.  Además, suponiendo que cada variable puede tomar d valores distintos, sabemos que la consistencia de un arco se puede validar en tiempo O(d^2).
 
-Entonces, tenemos en nuestro peor caso, n-1 arcos, que se encolarán d veces cada uno y con una complejidad de verificarlos de d^2, lo que nos da como resultado un tiempo de O((n-1)\*d^3), simplificado como O(n\*d^3) para nuestro peor caso.
+Entonces, tenemos en nuestro peor caso, n-1 arcos, que se encolarán 1 vez cada uno y con una complejidad de verificarlos de O(d^2), lo que nos da como resultado un tiempo de O((n-1)\*1\*d^2), simplificado como O(n\*d^2) para nuestro peor caso.
 
 ## Ejercicio 4
+
+Podríamos guardar para cada valor de Xk, cuántos valores de Xi satisfacen ese valor de Xk dado. De modo que cuando se elimina un valor del dominio de Xi, se restaría uno al contador de los arcos (Xi, Xk) para los Xk que corresponda. Cuando este contador llegue a cero, entonces el arco se considera inconsistente con respecto a los valores restantes de Xi y debe ser re-evaluado. Teniendo en cuenta que la consistencia de un arco se puede validar en tiempo O(d^2) y que cuando tenemos n variables tenemos O(n^2) arcos, al evitar con esta implementación que cada nodo sea evaluado hasta d veces, obtenemos una complejidad total de O(n^2\*d^2), una mejora con respecto a la complejidad original de O(n^2\*d^3).
 
 ## Ejercicio 5
 
