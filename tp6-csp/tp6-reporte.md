@@ -57,13 +57,10 @@ Dado un problema cuyo grafo de restricciones es un árbol, tendremos que cada no
 
 ## Ejercicio 6
 
-#### Tiempo de ejecución promedio en cada variante:
+#### Tiempos de ejecución en cada variante:
 
-Promise\<pending\>
+![imagen](https://user-images.githubusercontent.com/69587750/136311477-b4ab0488-7b48-424d-99fa-8e1b885e6f37.png)
   
 #### Cantidad de estados recorridos en cada variante:
   
-Promise\<pending\>
-
-Promise\<pending\>
-  
+![imagen](https://user-images.githubusercontent.com/69587750/136311496-13f128d2-15c9-425c-bf04-caeb24409019.png)
