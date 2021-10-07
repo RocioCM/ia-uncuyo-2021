@@ -1,4 +1,17 @@
-from environment import Environment
+def calculateThreats(queens):
+    cont = 0
+    size = len(queens)
+    for queen1 in range(size):
+        for queen2 in range(queen1 + 1, size):
+            if (queen1 == queen2):  # same column
+                cont += 1
+            elif (queens[queen1] == queens[queen2]):  # same row
+                cont += 1
+            elif (abs(queen1 -
+                      queen2) == abs(queens[queen1] -
+                                     queens[queen2])):  # same diagonal
+                cont += 1
+    return cont
 
 
 def recursiveBacktrack(queens, size, states):
@@ -6,7 +19,7 @@ def recursiveBacktrack(queens, size, states):
     for i in range(size):
         if (i not in queens):
             queens.append(i)
-            h = Environment.calculateThreats(queens)
+            h = calculateThreats(queens)
             if (h == 0):
                 if (len(queens) == size):
                     return queens
