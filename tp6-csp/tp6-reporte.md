@@ -59,8 +59,8 @@ Dado un problema cuyo grafo de restricciones es un árbol, tendremos que cada no
 
 #### Tiempos de ejecución en cada variante:
 
-![imagen](https://user-images.githubusercontent.com/69587750/136311477-b4ab0488-7b48-424d-99fa-8e1b885e6f37.png)
+![imagen](https://user-images.githubusercontent.com/69587750/136479431-d81b545a-4d06-4e32-81c1-9480e3347934.png)
   
 #### Cantidad de estados recorridos en cada variante:
   
-![imagen](https://user-images.githubusercontent.com/69587750/136311496-13f128d2-15c9-425c-bf04-caeb24409019.png)
+![imagen](https://user-images.githubusercontent.com/69587750/136479126-9c8c1d06-773f-49dc-82ea-cbe5528f4f19.png)
