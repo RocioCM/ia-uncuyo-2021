@@ -1,0 +1,332 @@
+---
+title: "Inteligencia Artificial I: TP7 - Machine Learning - Parte A"
+output: html_notebook
+---
+
+
+Importar las librerías necesarias:
+
+```{r}
+library(dplyr) 
+library(readr)
+library(caret)
+library(rpart)
+library(ggplot2)
+```
+
+
+
+Seleccionar de manera uniformemente aleatoria el 20% del conjunto de datos y crear un nuevo archivo con el nombre de _arbolado-publico-mendoza-2021-validation.csv_ y el 80% restante con el nombre de _arbolado-publico-mendoza-2021-train.csv_:
+
+```{r}
+trees_dataset <- read_csv("data/arbolado-mza-dataset.csv")
+
+# Get a sample of random indices for the train dataset.
+x <- seq(1:nrow(trees_dataset))
+size <- (nrow(trees_dataset) * 80) /100
+train_idx<-sample(x,size)
+
+# Split dataset.
+trees_train <- trees_dataset[train_idx,]
+trees_test <- trees_dataset[-train_idx,]
+
+trees_dataset %>% nrow() # Original dataset size
+trees_train %>% nrow() # Train dataset size
+trees_test %>% nrow()  # Test dataset size
+
+#write.csv(trees_train, 'data/arbolado-publico-mendoza-2021-train.csv')
+#write.csv(trees_test, 'data/arbolado-publico-mendoza-2021-validation.csv')
+```
+
+
+
+A partir del archivo arbolado-publico-mendoza-2021-train.csv, responder las siguientes preguntas:
+¿Cuál es la distribución de la clase inclinacion_peligrosa?
+
+```{r}
+distribution <- trees_train %>% group_by(inclinacion_peligrosa) %>% summarise(total=n())
+
+# Distribution of dangerous trees:
+distribution
+ggplot(distribution, aes(x = "", y = total, fill = inclinacion_peligrosa)) +
+  geom_col() +
+  coord_polar(theta = "y")
+```
+
+
+
+¿Se puede considerar alguna sección más peligrosa que otra?
+
+```{r}
+
+distribution_zones_danger <- trees_train %>% group_by(nombre_seccion) %>% summarise(porcentaje=round(sum(inclinacion_peligrosa)/n()*100, digits = 2))
+
+# Percentage of dangerous trees per zone:
+ggplot(distribution_zones_danger, aes(nombre_seccion, porcentaje, fill = porcentaje)) + geom_bar(stat="identity") + theme(axis.text.x = element_text(angle = 45, hjust = 1)) 
+
+```
+
+
+
+¿Se puede considerar alguna especie más peligrosa que otra?
+
+```{r}
+
+distribution_species_danger <- trees_train %>% group_by(especie) %>% summarise(peligrosos = sum(inclinacion_peligrosa), total = n(), porcentaje=round(sum(inclinacion_peligrosa)/n()*100, digits = 2))
+
+distribution_species_danger
+
+#Distribution of species:
+ggplot(distribution_species_danger, aes(especie, total, fill = especie)) + geom_bar(stat="identity") + theme(legend.position = "none", axis.text.x = element_text(angle = 45, hjust = 1)) 
+
+#Percentage of dangerous trees per specie:
+ggplot(distribution_species_danger, aes(especie, porcentaje, fill = porcentaje)) + geom_bar(stat="identity") + theme(axis.text.x = element_text(angle = 45, hjust = 1)) 
+
+```
+
+
+
+A partir del archivo _arbolado-publico-mendoza-2021-train.csv_:
+Generar un histograma de frecuencia para la variable _circ_tronco_cm_.
+
+```{r}
+
+trees_train <- read_csv("data/arbolado-publico-mendoza-2021-train.csv")
+
+# Histogram of tree trunk diameter distribution:
+ggplot(data = trees_train, aes(x = circ_tronco_cm)) + geom_histogram(bins=15, color="black", fill="dodgerblue") + theme(legend.position = "none")
+
+```
+
+
+
+Repetir el punto b) pero separando por la clase de la variable inclinación_peligrosa.
+
+```{r}
+trees_train_dangerous = trees_train %>% filter(inclinacion_peligrosa == 1)
+
+# Histogram of dangerous trees' trunk diameter distribution:
+ggplot(data = trees_train_dangerous, aes(x = circ_tronco_cm)) + geom_histogram(bins=15, color="black", fill="turquoise2") + theme(legend.position = "none")
+
+```
+
+
+
+Crear una nueva variable categórica de nombre circ_tronco_cm_cat a partir circ_tronco_cm, en donde puedan asignarse solo  4 posibles valores [ muy alto, alto, medio, bajo ]. Utilizar la información del punto a. para seleccionar los puntos de corte para cada categoría. Guardar el nuevo dataframe bajo el nombre de _arbolado-publico-mendoza-2021-circ_tronco_cm-train.csv_
+
+```{r}
+# Add and fill the new column.
+trees_with_cm_cat <- trees_train %>% mutate(circ_tronco_cm_cat = ifelse(circ_tronco_cm <= 100,'bajo',
+                                                                ifelse(circ_tronco_cm <= 200, 'medio',
+                                                                       ifelse(circ_tronco_cm <= 300, 'alto',
+                                                                              'muy alto'))))
+
+trees_with_cm_cat
+
+#write.csv(trees_with_cm_cat, 'data/arbolado-publico-mendoza-2021-circ_tronco_cm-train.csv')
+```
+
+
+
+Clasificador aleatorio:
+Implementar una función que dado un conjunto de observaciones (data.frame) genere una nueva columna de nombre prediction_prob con un valor aleatorio entre 0 y 1.
+
+```{r}
+
+add_prediction_prob_col <- function(df) {
+  rows <- nrow(df) 
+  
+  # Assigns a different random number to each row.
+  df$prediction_prob <- runif(rows, 0, 1)
+  return(df)
+}
+
+```
+
+
+
+Implementar una función de nombre random_classifier, que reciba como parámetro  el dataframe generado con anterioridad y a partir de la columna predictions_prob genere una nueva columna prediction_class bajo el siguiente criterio:
+
+`if prediction_prob > 0.5 then prediction_class=1 else prediction_class=0`
+
+La función deberá devolver el dataframe original junto a la nueva columna generada.
+
+```{r}
+
+random_classifier <- function(df) {
+  # Assign a class to each element based on the random prediction for that element.
+  df <- df %>% mutate(prediction_class = ifelse(prediction_prob > 0.5, 1 ,0))
+  return(df)
+}
+
+```
+
+
+
+Cargar el archivo _arbolado-publico-mendoza-2021-validation.csv_ como un data.frame y aplicarle la función random_classifier.
+
+```{r}
+
+trees_test <- read_csv("data/arbolado-publico-mendoza-2021-validation.csv")
+
+# Add the prediction_prob column first, then call random_classifier with the generated dataframe.
+trees_test_randomly_classified <- random_classifier(add_prediction_prob_col(trees_test))
+
+trees_test_randomly_classified
+
+```
+
+
+
+A partir de la columna recientemente generada y la columna actual calcular utilizando lenguaje R (dplyr):
+- Número de árboles CON inclinación peligrosa que fueron correctamente predecidos como peligrosos por el modelo/algoritmo. (True Positive)
+- Número de árboles SIN inclinación peligrosa  que fueron correctamente predecidos como no peligrosos por el modelo. (True Negative)
+- Número de árboles SIN inclinación peligrosa que fueron incorrectamente predecidos como peligrosos según el modelo. (False Positives)
+- Número de árboles CON inclinación peligrosa que fueron incorrectamente predecidos como no peligrosos según el modelo. (False Negatives)
+
+```{r}
+confusion_matrix <- function(df) {
+  # Calculate all values.
+  true_positives <- df %>% filter(inclinacion_peligrosa == 1 & prediction_class == 1) %>% nrow() 
+  true_negatives <- df %>% filter(inclinacion_peligrosa == 0 & prediction_class == 0) %>% nrow() 
+  false_positives <- df %>% filter(inclinacion_peligrosa == 0 & prediction_class == 1) %>% nrow() 
+  false_negatives <- df %>% filter(inclinacion_peligrosa == 1 & prediction_class == 0) %>% nrow() 
+  
+  # Format and return values in a dataframe.
+  confusion_matrix <- data.frame('n'= c("Actual YES", "Actual NO"), 
+                                 "Predicted YES" = c(true_positives, false_positives), 
+                                 "Predicted NO"= c(false_negatives, true_negatives))
+  return(confusion_matrix)
+}
+
+confusion_matrix(trees_test_randomly_classified)
+```
+
+
+
+Clasificador por clase mayoritaria:
+Implementar una función de nombre biggerclass_classifier, que reciba como parámetro  el dataframe generado con anterioridad nueva columna prediction_class en donde se asigne siempre de la clase mayoritaria.
+La función deberá devolver el dataframe original junto a la nueva columna generada.
+
+```{r}
+
+biggerclass_classifier <- function(df) {
+  # Obtain the classes distribution.
+  classes <- df %>% group_by(inclinacion_peligrosa) %>% summarise(cantidad=n())
+  
+  # Get the bigger class and assign that class to all elements.
+  bigger_class <- classes[order(-classes$cantidad), ]$inclinacion_peligrosa[1]
+  df$prediction_class <- bigger_class
+  return(df)
+}
+
+```
+
+
+
+Repetir los puntos 4.c y 4.d pero aplicando la nueva función biggerclass_classifier.
+
+```{r}
+
+trees_test <- read_csv("data/arbolado-publico-mendoza-2021-validation.csv")
+
+trees_test_biggerclass_classified <- biggerclass_classifier(trees_test)
+
+trees_test_biggerclass_classified
+
+confusion_matrix(trees_test_biggerclass_classified)
+
+```
+
+
+
+A partir de una matriz de confusión es posible calcular distintas métricas que nos permiten determinar la calidad del modelo de clasificación. Calcular: Accuracy, Precision, Sensitivity, Specificity y calcularlas para las matrices de confusión generadas en los puntos 4 y 5.
+
+```{r}
+
+# Receives a df created with the confusion_matrix function defined above.
+metrics <- function(confusion_matrix) {
+  # Get variables values
+  TP <- confusion_matrix$Predicted.YES[1]
+  TN <- confusion_matrix$Predicted.NO[2]
+  FP <- confusion_matrix$Predicted.YES[2]
+  FN <- confusion_matrix$Predicted.NO[1]
+  
+  # Calculate metrics.
+  size <- TP + TN + FP + FN
+  accuracy <- (TP+TN) / size
+  sensitivity <- TP / (TP+FN)
+  specificity <- TN / (TN+FP)
+  precision <- TP / (TP+FP)
+  negative_predictive_value <- TN / (TN+FN)
+  
+  # Return metrics formatted in a dataframe.
+  metrics_df <- data.frame("n" = size, "Accuracy" = accuracy, "Precision" = precision, "Sensitivity" = sensitivity, "Specificity" = specificity, "Negative_predictive_value" = negative_predictive_value)
+  
+  return(metrics_df)
+}
+
+# Metrics for random classifier
+metrics(confusion_matrix(trees_test_randomly_classified))
+
+# Metrics for bigger-class classifier
+metrics(confusion_matrix(trees_test_biggerclass_classified))
+```
+
+
+
+Validación cruzada/Cross validation:
+
+La validación cruzada es una técnica para estimar el error de generalización de un algoritmo/modelo de machine learning. La técnica consiste en (previo realizar una mezcla aleatoria) separar el conjunto de datos en k partes (normalmente denominadas folds). Luego en la primera iteración se utilizan k-1 partes para entrenar E1 y se utiliza la restante para test. El proceso se repite por k iteraciones utilizando en cada una diferentes conjuntos de entrenamiento y test. 
+
+
+Crear una función de nombre create_folds() que reciba como parámetro un dataframe y la cantidad de folds y devuelva una lista de R con la siguiente estructura:
+
+`list(Fold1=c(...), Fold2=c(..),... Fold10=c())`
+
+Donde Fold1 va a contener los índices del dataframe que fueron seleccionados para el primer fold, y así con los demás.
+
+```{r}
+
+create_folds <- function(df, n_folds) {
+  indices <- 1:nrow(df)
+  max_fold_size <- ceiling(nrow(df)/n_folds)
+  
+  # Split the indices in n_folds groups containing at most max_fold_size elements.
+  folds_indices <- split(indices, sample(rep(1:n_folds, max_fold_size)))
+  
+  # Returns a list with just the indices of the elements for each fold (not containing the elements themselves of the dataset).
+  return(folds_indices)
+}
+
+# Example:
+#create_folds(trees_test, 10)
+
+```
+
+
+
+Crear una función de nombre cross_validation() que reciba como parámetro un data frame y un número de folds y entrene un modelo de árbol de decisión (utilizar paquete rpart) para cada uno de los posibles conjuntos de entrenamiento  y calcule las métricas: Accuracy, Precision, Sensitivity, Specificity  para cada uno de los  posibles conjuntos de tests. Devolver media y desviación estándar.
+
+```{r}
+
+trees_train <- read_csv("data/arbolado-publico-mendoza-2021-train.csv")
+trees_test <- read_csv("data/arbolado-publico-mendoza-2021-validation.csv")
+
+# Supposed to make work the class predictor (but noup)..
+#trees_train$inclinacion_peligrosa = factor(trees_train$inclinacion_peligrosa, levels = c(0, 1))
+
+# Select class and variables of interest.
+train_formula <- formula(inclinacion_peligrosa ~ altura + circ_tronco_cm + lat + long + seccion + especie)
+
+# Generate the model
+trees_model <- rpart(train_formula, data=trees_train)
+
+#trees_model
+
+# Test the model.
+#prediction <- predict(trees_model, newdata = trees_test, type="class") 
+
+#prediction
+
+```
