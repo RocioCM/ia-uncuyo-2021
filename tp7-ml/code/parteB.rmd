@@ -1,0 +1,63 @@
+---
+title: "Inteligencia Artificial I: TP7 - Machine Learning - Parte B"
+output: html_notebook
+---
+
+
+```{r}
+# Import necessary libraries.
+
+library(dplyr) 
+library(readr)
+library(rpart)
+
+```
+
+
+
+Let the magic begin.
+
+```{r}
+
+# Import the datasets.
+train_dataset <- read_csv("../data/arbolado-mza-dataset.csv", show_col_types = FALSE)
+test_dataset <- read_csv("../data/arbolado-mza-dataset-test.csv", show_col_types = FALSE)
+
+
+# Clean the datasets.
+# Remove the non-important attributes.
+clean_dataset <- function(df) {
+  cleaned_df <- subset(df, select = -c(ultima_modificacion, circ_tronco_cm, nombre_seccion, area_seccion, long, lat ))
+  return (cleaned_df)
+}
+
+train_dataset$inclinacion_peligrosa <- as.factor(train_dataset$inclinacion_peligrosa)
+train_dataset <- clean_dataset(train_dataset)
+test_dataset <- clean_dataset(test_dataset)
+
+# Keep all the positives (minority) and just a sample of the negatives (mayority).
+positives <- train_dataset %>% filter(inclinacion_peligrosa == 1)
+negative_indices <- which(train_dataset$inclinacion_peligrosa == 0)
+
+filtered_negatives_indices <- sample(negative_indices, size = 7158)
+negatives <- train_dataset[filtered_negatives_indices, ]
+actual_train_data <- rbind(negatives, positives, positives)
+
+# Train the model.
+train_formula<-formula(inclinacion_peligrosa ~ especie + altura + diametro_tronco + seccion)
+model<-rpart(train_formula, actual_train_data, method = "class")
+#model
+
+# Predict test dataset.
+prediction <- predict(model, newdata=test_dataset, method="class")
+
+# Format and save prediction.
+prediction <- round(prediction, digits=0)[ ,2]
+id <- test_dataset$id
+results <- data.frame("id" = id,"inclinacion_peligrosa" = prediction)
+#results
+
+#write.csv(results,"results.csv")
+
+```
+
