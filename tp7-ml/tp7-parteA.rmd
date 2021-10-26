@@ -7,11 +7,13 @@ output: html_notebook
 Importar las librerías necesarias:
 
 ```{r}
+
 library(dplyr) 
 library(readr)
 library(caret)
 library(rpart)
 library(ggplot2)
+
 ```
 
 
@@ -19,6 +21,7 @@ library(ggplot2)
 Seleccionar de manera uniformemente aleatoria el 20% del conjunto de datos y crear un nuevo archivo con el nombre de _arbolado-publico-mendoza-2021-validation.csv_ y el 80% restante con el nombre de _arbolado-publico-mendoza-2021-train.csv_:
 
 ```{r}
+
 trees_dataset <- read_csv("data/arbolado-mza-dataset.csv")
 
 # Get a sample of random indices for the train dataset.
@@ -36,6 +39,7 @@ trees_test %>% nrow()  # Test dataset size
 
 #write.csv(trees_train, 'data/arbolado-publico-mendoza-2021-train.csv')
 #write.csv(trees_test, 'data/arbolado-publico-mendoza-2021-validation.csv')
+
 ```
 
 
@@ -44,6 +48,7 @@ A partir del archivo arbolado-publico-mendoza-2021-train.csv, responder las sigu
 ¿Cuál es la distribución de la clase inclinacion_peligrosa?
 
 ```{r}
+
 distribution <- trees_train %>% group_by(inclinacion_peligrosa) %>% summarise(total=n())
 
 # Distribution of dangerous trees:
@@ -51,6 +56,7 @@ distribution
 ggplot(distribution, aes(x = "", y = total, fill = inclinacion_peligrosa)) +
   geom_col() +
   coord_polar(theta = "y")
+
 ```
 
 
@@ -313,20 +319,20 @@ Crear una función de nombre cross_validation() que reciba como parámetro un da
 trees_train <- read_csv("data/arbolado-publico-mendoza-2021-train.csv")
 trees_test <- read_csv("data/arbolado-publico-mendoza-2021-validation.csv")
 
-# Supposed to make work the class predictor (but noup)..
-#trees_train$inclinacion_peligrosa = factor(trees_train$inclinacion_peligrosa, levels = c(0, 1))
+# Format.
+trees_train$inclinacion_peligrosa <- as.factor(trees_train$inclinacion_peligrosa)
 
 # Select class and variables of interest.
-train_formula <- formula(inclinacion_peligrosa ~ altura + circ_tronco_cm + lat + long + seccion + especie)
+train_formula <- formula(inclinacion_peligrosa ~ especie)
 
-# Generate the model
-trees_model <- rpart(train_formula, data=trees_train)
+# Train the model.
+trees_model <- rpart(train_formula, data=trees_train, method="class")
 
 #trees_model
 
 # Test the model.
-#prediction <- predict(trees_model, newdata = trees_test, type="class") 
+prediction <- predict(trees_model, newdata = trees_test, type="class") 
 
-#prediction
+write.csv(prediction,"partA-results.csv")
 
 ```
