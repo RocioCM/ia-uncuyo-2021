@@ -1,8 +1,16 @@
-from decisiontree import decisionTree
+from decisiontree import decisionTree, Object
+import csv
 
-
-# ### How to csv into python. Or I have to do it myself?
+file = open('tennis.csv')
+csvReader = csv.reader(file)
 dataset = []
+attributes = next(csvReader)
+for rowValues in csvReader:
+    element = Object(attributes, rowValues)
+    dataset.append(element)
+file.close()
 
-decisionTree = decisionTree(dataset, ['a', 'b', 'c'], 'played', 0)
-print(decisionTree.root.value, decisionTree.root.children)
+formulaAttributes = attributes.copy()
+formulaAttributes.remove('play')
+
+decisionTree = decisionTree(dataset, formulaAttributes, 'play', 'yes')
