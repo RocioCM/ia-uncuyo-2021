@@ -18,7 +18,7 @@ Estas métricas se tomarán sobre x cantidad de ejecuciones del algoritmo partie
 
 ...
 
-## Justificación:
+## Justificación
 
 Por que se considerá que se puede aplicar algoritmos de IA. Porque se considera que se puede aplicar algoritmos/técnicas de IA y no solucionar mediante algún otro enfoque.
 
@@ -28,10 +28,30 @@ Dada la cantidad de posibles estados de un cubo rubik realizando movimientos de 
 
 ## Listado de actividades a realizar
 
-Incluir entre 8 y 10 actividades (mientras más desglosadas las actividades, mejor). Incluir una estimación de tiempo de cada actividad.
+**Actividad 1:** investigación de bibliografía y planteos previos del mismo problema. _[3 días]_
 
-Actividad 1. Recopilación de bibliografía y/o ejemplos del problema a resolver. [7 días] Actividad 2. Puesta a punto del código fuente de base para resolver el problema [4 días] Actividad 3. Implementación de característica A dentro del código. [4 días] Actividad 4. Implementación de característica B dentro del código. [4 días] Actividad 5. Implementación de característica C dentro del código. [7 días] Actividad 6. Ejecución de los experimentos a fin de validar el objetivo. [1 día] Actividad 7. Análisis de los resultados. [2 días] Actividad 8. Escritura de informe final. [7 días]
+**Actividad 2:** maquetado/diagramado del algoritmo y arquitectura del proyecto. _[2 días]_
 
-## Cronograma estimado de actividades:
+**Actividad 3:** creación de la estructura `Cubo` y las 12 acciones (funciones) que lo modifican. _[1 día]_
 
-Tener en cuenta que pueden haber actividades que pueden realizarse en paralelo y otras que no.
+**Actividad 4:** implementación del algoritmo genético. _[7 días]_ 
+
+**Actividad 5:** ajuste de parámetros para optimizar el rendimiento. _[1 día]_
+
+**Actividad 6:** análisis de resultados y obtención de métricas. _[1 día]_
+
+**Actividad 7:** análisis de métricas y desarrollo de la conclusión. _[1 día]_
+
+**Actividad 8:** elaboración del informe final. _[5 días]_
+
+#### Actividades tentativas:
+
+**Actividad 1.1:** investigar sobre Reinforcement Learning. _[2 días]_
+
+**Actividad 4.1:** segunda implementación de la solución mediante Reinforcement Learning. _[10 días]_ 
+
+**Actividad 6.1:** comparación del desempeño de ambos algoritmos. _[1 día]_
+
+## Cronograma estimado de actividades
+
+![imagen](https://user-images.githubusercontent.com/69587750/140009878-17bf58ea-38d0-4f79-8efa-6ea055aaa9a5.png)
