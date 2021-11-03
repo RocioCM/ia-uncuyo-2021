@@ -1,8 +1,8 @@
 # Resolución de Cubos Rubik
 
-### **Código del Proyecto:** `rubik-cube`
+### Código del Proyecto: `rubik-cube`
 
-### **Estudiante:** Rocío Corral
+### Estudiante: Rocío Corral
 
 <img src="https://user-images.githubusercontent.com/69587750/139362634-e8ff2b1f-3eed-465d-921e-73705015923b.png" alt="Rubik Cube" width="200"/>
 
@@ -18,13 +18,23 @@ Estas métricas se tomarán sobre x cantidad de ejecuciones del algoritmo partie
 
 ...
 
+### Bibliografía
+
+AIMA 3rd Edition - Chapters 4.1 (Genetic Algorithms) and 21 (Reinforcement Learning)
+
+[Novel Rubik’s Cube Problem Solver by Combining Group Theory and Genetic Algorithm](https://link.springer.com/article/10.1007/s42979-019-0054-4)
+
+[Solving the Rubik’s cube with deep reinforcement learning and search](https://openreview.net/pdf?id=Hyfn2jCcKm)
+
+[The Mathematics of the Rubik’s Cube](https://web.mit.edu/sp.268/www/rubik.pdf)
+
 ## Justificación
 
-Por que se considerá que se puede aplicar algoritmos de IA. Porque se considera que se puede aplicar algoritmos/técnicas de IA y no solucionar mediante algún otro enfoque.
+Un cubo rubik clásico, de dimensión 3x3, tiene más de 43 trillones de posibles estados distintos a los que se puede llegar partiendo desde el estado armado simplemente rotando sus caras. Teniendo en cuenta esta gran cantidad de estados y considerando a su vez que el estado objetivo (o estado armado) es únicamente uno, se revela a simple vista que una aproximación para resolver este problema mediante fuerza bruta es inviable.
 
----
+Cuando una persona se enfrenta a este puzzle, la solución se alcanza paso a paso observando el estado actual del cubo, ejecutando una secuencia específica de movimientos para llegar a otro estado más cercano a la solución y repitiendo con secuencias de movimientos cada vez más complejas (para no revertir el trabajo ya hecho en los pasos previos). Desde esta perspectiva, se podría programar un algoritmo de estados finitos, que determine el estado del cubo y en base a esto decida qué secuencia de movimientos de las provistas ejecuta. Si bien este enfoque es más factible, aún requiere que clasifiquemos todos los estados posibles del cubo en "grupos" de estados compatibles con cada secuencia de movimientos. Una solución de este tipo, si bien factible, implicaría obligar a la computadora a resolver el cubo como un humano lo haría, lo cual es una limitación al poder de cómputo del que disponemos. 
 
-Dada la cantidad de posibles estados de un cubo rubik realizando movimientos de sus caras a partir del estado armado (al rededor de ...) y teniendo en cuenta que el estado objetivo es solo 1, se revela a simple vista que una aproximación por fuerza bruta es inviable. Cuando una persona se enfrenta a este puzzle, la solución se alcanza paso a paso observando el estado actual del cubo, ejecutando una secuencia específica de movimientos para llegar a otro estado más cercano a la solución y repitiendo con secuencias de movimientos cada vez más complejas (para no revertir el trabajo ya hecho en los pasos previos). Desde esta perspectiva, se podría programar un algoritmo de estados finitos, que determine el estado del cubo y en base a esto decida qué secuencia de movimientos de las provistas ejecuta. Pero esto sería obligar a la computadora a resolver el cubo como un humano lo haría. La idea detrás de usar un algoritmo de Inteligencia Artificial como lo es el Reinforcement Learning o un algoritmo genético es lograr no sólo que la computadora resuelva el cubo, sino observar cómo aprende a hacerlo a su vez qué tan eficientemente lo hace, y esto es algo que no se puede lograr a través de los enfoques previos, en donde se le proveen al algoritmo las reglas y únicamente debe aplicarlas en orden.
+La idea detrás de usar un algoritmo de Inteligencia Artificial como lo es Reinforcement Learning o un algoritmo genético, es lograr no sólo que la computadora resuelva el cubo, sino que _aprenda_ a hacerlo a partir de un conjunto de reglas pequeño y simple. De modo que podamos observar cómo aprende a hacerlo y a su vez qué tan eficientemente lo hace, siendo esto es algo que no se puede lograr a través de los enfoques previos, en donde se provee al algoritmo con la totalidad de las reglas y únicamente debe aplicarlas en orden, de forma determinística.
 
 ## Listado de actividades a realizar
 
