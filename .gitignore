@@ -5,3 +5,6 @@
 
 # cache
 *__pycache__/
+
+# sub-repo
+proyecto_final/*
